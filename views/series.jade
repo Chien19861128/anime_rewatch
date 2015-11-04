@@ -1,0 +1,24 @@
+extends layout
+
+block content
+    .row
+        .col-lg-4
+            h3= series.title
+            div
+                p Rewatching:
+                    .btn-group(role="group", aria-label="...")
+                    a.btn.btn-danger Add
+                    a.btn.btn-primary Start Group
+            p Alternative titles: #{series.title2}/#{series.title3}
+            p Type: #{series.type}
+            p Length: #{series.length}
+            p Episodes: #{series.episode_count}
+            p Vintage: #{series.vintage}
+            p Description: #{series.description}
+        .col-lg-4
+            each tag, tag_key in series.official_tags
+                a.btn-sm.btn-info(href="#", title="", target="_blank") 
+                    small #{tag}
+    .row
+        each episode, episode_key in episodes
+            p #{episode.number} #{episode.title}
