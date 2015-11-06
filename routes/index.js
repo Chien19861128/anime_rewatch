@@ -39,15 +39,26 @@ passport.use(new RedditStrategy({
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    
-	var users_insert = "INSERT INTO users(name, provider) VALUES(?, ?) IF NOT EXISTS ";
-	var users_params = [req.user.name, req.user.provider];
+    if (typeof req.user != 'undefined') {
+        
+        var users_insert = "INSERT INTO users(name, provider) VALUES(?, ?) IF NOT EXISTS ";
+        var users_params = [req.user.name, req.user.provider];
 				
-	client.execute(users_insert, users_params, {prepare: true}, function (err, result) {
-		if (err) console.log(err);
-	});
+        client.execute(users_insert, users_params, {prepare: true}, function (err, result) {
+            if (err) console.log(err);
+        });
+        
+        res.render('index', { 
+            title: 'Rewatcher',
+            user: req.user
+        });
+    } else {
+        res.render('index', { 
+            title: 'Rewatcher',
+            user: false
+        });
+    }
     
-    res.render('index', { title: '[user]' + req.user.id + '[name]' + req.user.name + '[over_18]' + req.user.over_18 });
 });
 
 router.get('/auth/reddit', function(req, res, next){

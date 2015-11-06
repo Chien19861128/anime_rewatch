@@ -1,5 +1,31 @@
 extends layout
 
 block content
-    h1= title
-    p Welcome to #{title}
+    .row
+        .col-lg-6.top-box
+            h4= "Discussing Now"
+        .col-lg-6.top-box
+            if user.name
+                h4= "Schedule"
+            else
+                a.btn-lg.btn-success(href="/auth/reddit", title="", target="_blank") Login with Reddit
+    .row
+        .btn-group(role="group", aria-label="...")
+            a.btn.btn-primary Button1
+            a.btn.btn-primary Button2
+            a.btn.btn-primary Button3
+            a.btn.btn-primary Button4
+            a.btn.btn-primary Button5
+    .row
+        h4= "Ongoing Groups"
+        .col-lg-2 Day1
+        .col-lg-2 Day2
+        .col-lg-2 Day3
+        .col-lg-2 Day4
+        .col-lg-2 Day5
+        .col-lg-2 Day6
+    .row
+        .col-lg-6.top-box
+            h4= "Upcoming Groups"
+        .col-lg-6.top-box
+            h4= "Groups by Tags"
