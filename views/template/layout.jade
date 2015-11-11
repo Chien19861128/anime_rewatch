@@ -1,0 +1,18 @@
+doctype html
+html
+    head
+        title= title
+        link(rel='stylesheet', href='/stylesheets/style.css')
+        script(type='text/javascript', src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js')
+        link(rel='stylesheet', href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css')
+        script(type='text/javascript', src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js')
+        link(rel='stylesheet', href='/bootstrap/dist/css/bootstrap.min.css')
+        script(type='text/javascript', src='/bootstrap/dist/js/bootstrap.min.js')
+    body
+        .container
+            form.navbar-form.navbar-right(name="search", action="/search", method="post")
+                .row.col-lg-offset-8.col-lg-3.form-group-sm
+                    input.form-control.form-control-sm(type="text", name="search_text", placeholder="Search", required)
+                .row.col-lg-1
+                    button.btn.btn-sm.btn-primary(type="submit", value="go") GO
+        block content

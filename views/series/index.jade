@@ -1,4 +1,4 @@
-extends layout
+extends ../template/layout
 
 block content
     .row
@@ -8,7 +8,7 @@ block content
                 p Rewatching:
                     .btn-group(role="group", aria-label="...")
                     a.btn.btn-danger Add
-                    a.btn.btn-primary Start Group
+                    a.btn.btn-primary(href="/series/" + series.slug + "/start_group", target="") Start Group
             p Alternative titles: #{series.title2}/#{series.title3}
             p Type: #{series.type}
             p Length: #{series.length}
@@ -17,7 +17,7 @@ block content
             p Description: #{series.description}
         .col-lg-4
             each tag, tag_key in series.official_tags
-                a.btn-sm.btn-info(href="#", title="", target="_blank") 
+                a.btn-sm.btn-info(href="#", title="", target="") 
                     small #{tag}
     .row
         each episode, episode_key in episodes

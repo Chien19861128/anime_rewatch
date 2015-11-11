@@ -61,6 +61,45 @@ router.get('/', function(req, res, next) {
     
 });
 
+router.get('/login', function(req, res, next) {
+
+    res.render('login', { 
+        title: 'Login',
+        user: (typeof req.user != 'undefined')?req.user:false
+    });
+});
+
+router.post('/search', function(req, res, next) {
+    
+    var search_text = "";
+    if (req.body.is_big_search) {
+        search_text = (req.body.big_search_text)?req.body.big_search_text:"";
+    } else {
+        search_text = (req.body.search_text)?req.body.search_text:"";
+    }
+    
+    var search_split = search_text.split(" ");
+    var regex_text = '';
+    
+    for (var i=0; typeof search_split[i] != 'undefined'; i++) {
+        if (search_split[i]) {
+            regex_text += '.*?[' + search_split[i].charAt(0).toUpperCase() + search_split[i].charAt(0).toLowerCase() + ']' + search_split[i].slice(1);
+        }
+    }
+    if (regex_text) regex_text += '.*?';
+        
+	client.execute("SELECT * FROM series WHERE lucene='{filter: {type: \"regexp\", field : \"title\", value: \""+regex_text+"\"}}'", function (series_err, series_result) {
+        if (!series_err){
+	        res.render('search', { 
+                title: 'Search - ' + search_text,
+                search_text: search_text,
+	            series: series_result.rows,
+                result_count: series_result.rowLength
+	        });
+	    }		
+	});
+});
+
 router.get('/auth/reddit', function(req, res, next){
     req.session.state = crypto.randomBytes(32).toString('hex');
     passport.authenticate('reddit', {
@@ -72,9 +111,12 @@ router.get('/auth/reddit', function(req, res, next){
 router.get('/auth/reddit/callback', function(req, res, next){
     // Check for origin via state token 
     if (req.query.state == req.session.state){
+        console.log('[callback]');
+        console.log(req.session.login_redirect);
+        var redirect = (typeof req.session.login_redirect != 'undefined' && req.session.login_redirect)?req.session.login_redirect:'/';
         passport.authenticate('reddit', {
-            successRedirect: '/',
-            failureRedirect: '/'
+            successRedirect: redirect,
+            failureRedirect: redirect
         })(req, res, next);
     } else {
         //next( new Error 403 );
@@ -85,6 +127,11 @@ router.get('/auth/reddit/callback', function(req, res, next){
             error: err
         });
     }
+});
+
+router.get('/logout', function(req, res, next){
+    req.logout();
+    res.redirect('/');
 });
 
 module.exports = router;

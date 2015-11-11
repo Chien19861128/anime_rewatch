@@ -1,0 +1,15 @@
+extends template/layout
+
+block content
+    .row.container
+        form.navbar-form.navbar-right(name="big_search", action="/search", method="post")
+            .form-group
+                input.input-group-lg.form-control(type="text", name="big_search_text", placeholder="Search", required, value=search_text)
+                input(type="hidden", name="is_big_search", value="1")
+            button.btn.btn-sm.btn-primary(type="submit", value="go") GO
+    .row
+        h4= result_count + " Results"
+        each series_value, series_key in series
+            .row
+                a(href="/series/" + series_value.slug, title="", target="") #{series_value.title} #{series_value.type}
+            

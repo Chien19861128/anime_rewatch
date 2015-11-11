@@ -1,4 +1,4 @@
-extends layout
+extends template/layout
 
 block content
     .row
@@ -8,7 +8,7 @@ block content
             if user.name
                 h4= "Schedule"
             else
-                a.btn-lg.btn-success(href="/auth/reddit", title="", target="_blank") Login with Reddit
+                a.btn-lg.btn-success(href="/auth/reddit", title="", target="") Login with Reddit
     .row
         .btn-group(role="group", aria-label="...")
             a.btn.btn-primary Button1
