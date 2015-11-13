@@ -9,7 +9,7 @@ block content
             input(type="hidden", name="series_slug", value=series.slug)
             input.form-control(type="text", name="name", placeholder="Name for the group", required)
             input.form-control(type="text", name="description", placeholder="Description")
-            input.form-control(type="text", name="main_link", placeholder="Discussion Forum Link")
+            input.form-control(type="text", name="discussion_link", placeholder="Discussion Forum Link")
             input.form-control(type="text", name="ref_link", placeholder="Reference Link")
             input.form-control(type="text", name="first_time", id="first_time", placeholder="Pick first time", value="")
             script(type='text/javascript').
@@ -34,4 +34,4 @@ block content
                     option(value="5") 5
                     option(value="6") 6
                     option(value="7") 7
-            button.btn.btn-sm.btn-primary(type="submit", value="go") GO
+            button.btn.btn-sm.btn-primary(type="submit", value="go") Start

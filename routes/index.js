@@ -111,8 +111,7 @@ router.get('/auth/reddit', function(req, res, next){
 router.get('/auth/reddit/callback', function(req, res, next){
     // Check for origin via state token 
     if (req.query.state == req.session.state){
-        console.log('[callback]');
-        console.log(req.session.login_redirect);
+        
         var redirect = (typeof req.session.login_redirect != 'undefined' && req.session.login_redirect)?req.session.login_redirect:'/';
         passport.authenticate('reddit', {
             successRedirect: redirect,
