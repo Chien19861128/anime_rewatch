@@ -4,9 +4,9 @@ var express = require('express')
   , crypto = require('crypto')
   , RedditStrategy = require('passport-reddit').Strategy;
 var router = express.Router();
-var cassandra = require('cassandra-driver');
+var monk = require('monk');
 
-var client = new cassandra.Client({contactPoints: ['127.0.0.1'], keyspace: 'rewatch'});
+var db = monk('127.0.0.1:27017/rewatch');
 
 var REDDIT_CONSUMER_KEY = "hR9fXJLR4f-O6w";
 var REDDIT_CONSUMER_SECRET = "ouURHl2Fggqs5vhJRTvRC0O-tF4";
@@ -40,12 +40,11 @@ passport.use(new RedditStrategy({
 /* GET home page. */
 router.get('/', function(req, res, next) {
     if (typeof req.user != 'undefined') {
-        
-        var users_insert = "INSERT INTO users(name, provider) VALUES(?, ?) IF NOT EXISTS ";
-        var users_params = [req.user.name, req.user.provider];
-				
-        client.execute(users_insert, users_params, {prepare: true}, function (err, result) {
-            if (err) console.log(err);
+          
+        var users = db.get('users');
+        users.insert({
+            name: req.user.name,
+            provider: req.user.provider
         });
         
         res.render('index', { 

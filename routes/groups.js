@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
-var cassandra = require('cassandra-driver');
+var monk = require('monk');
 var slug = require('slug');
 
-var client = new cassandra.Client({contactPoints: ['127.0.0.1'], keyspace: 'rewatch'});
+var db = monk('127.0.0.1:27017/rewatch');
 
 router.post('/create', function(req, res, next) {
     console.log(req.body);
