@@ -4,7 +4,7 @@ var monk = require('monk');
 var slug = require('slug');
 
 var db = monk('127.0.0.1:27017/rewatch');
-
+/*
 router.post('/create', function(req, res, next) {
     console.log(req.body);
     console.log(req.user);
@@ -142,6 +142,6 @@ router.post('/:slug/edit', function(req, res, next) {
             }
         }
     });
-});
+});*/
 
 module.exports = router;

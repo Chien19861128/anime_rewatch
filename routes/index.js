@@ -87,6 +87,18 @@ router.post('/search', function(req, res, next) {
     }
     if (regex_text) regex_text += '.*?';
         
+    var series = db.get('series');
+    series.find({title: { $regex: regex_text, $options: 'i' }}, function (err, series_result) {
+        if (!err) {
+	        res.render('search', { 
+                title: 'Search - ' + search_text,
+                search_text: search_text,
+	            series: series_result,
+                result_count: series_result.count
+	        });
+        }
+    });
+    /*
 	client.execute("SELECT * FROM series WHERE lucene='{filter: {type: \"regexp\", field : \"title\", value: \""+regex_text+"\"}}'", function (series_err, series_result) {
         if (!series_err){
 	        res.render('search', { 
@@ -96,7 +108,7 @@ router.post('/search', function(req, res, next) {
                 result_count: series_result.rowLength
 	        });
 	    }		
-	});
+	});*/
 });
 
 router.get('/auth/reddit', function(req, res, next){

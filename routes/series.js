@@ -8,6 +8,24 @@ router.get('/:slug', function(req, res, next) {
     
 	req.session.login_redirect = req.originalUrl;
     
+    var series = db.get('series');
+    series.findOne({slug: req.params.slug}, function (err, series_result) {
+        if (!err) {
+            var episodes = db.get('episodes');
+            
+            episodes.find({series_slug: req.params.slug}, {number: 1}, function (episodes_err, episodes_result) {
+                if (!episodes_err) {
+	    	        res.render('series/index', {
+                        title: series_result.title,
+		                series: series_result,
+                        episodes: episodes_result
+		            });
+		        }
+            });
+        }
+    });
+    
+    /*
     client.execute("SELECT * FROM series WHERE slug='" + req.params.slug + "'", function (err, result) {
         if (!err){
 			var series = result.rows[0];
@@ -22,22 +40,32 @@ router.get('/:slug', function(req, res, next) {
 		        }		
 	        });
         }
-    });
+    });*/
 });
 
 router.get('/:slug/start_group', function(req, res, next) {
     
     if (typeof req.user != 'undefined') {
         
-        client.execute("SELECT * FROM series WHERE slug='" + req.params.slug + "'", function (err, result) {
-            if (!err){
+        var series = db.get('series');
+        series.findOne({slug: req.params.slug}, function (err, series_result) {
+            if (!err) {
+                res.render('series/start_group', {
+                    title: 'Starting group for - ' + series.title,
+                    series: series
+                });
+            }
+        });
+        
+        /*client.execute("SELECT * FROM series WHERE slug='" + req.params.slug + "'", function (err, result) {
+            if (!err) {
                 var series = result.rows[0];
                 res.render('series/start_group', { 
                     title: 'Starting group for - ' + series.title,
                     series: series
                 });
             }
-        });
+        });*/
     } else {
         req.session.login_redirect = req.originalUrl;
         res.redirect('/login');
