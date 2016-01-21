@@ -5,4 +5,9 @@ block content
         if user.name
             a.btn-lg.btn-success(href="/logout", title="", target="_blank") Logout
         else
+            form(name="login_local", action="/auth/local", method="post")
+                .form-group
+                    input.form-control(type="text", name="username", placeholder="User Name", required)
+                    input.form-control(type="text", name="password", placeholder="Password", required)
+                    button.btn.btn-sm.btn-primary(type="submit", value="go") Login
             a.btn-lg.btn-success(href="/auth/reddit", title="", target="") Login with Reddit

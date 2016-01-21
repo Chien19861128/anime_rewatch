@@ -2,7 +2,8 @@ var express = require('express')
   , passport = require('passport')
   , util = require('util')
   , crypto = require('crypto')
-  , RedditStrategy = require('passport-reddit').Strategy;
+  , RedditStrategy = require('passport-reddit').Strategy
+  , LocalStrategy = require('passport-local').Strategy;
 var router = express.Router();
 var monk = require('monk');
 
@@ -37,10 +38,22 @@ passport.use(new RedditStrategy({
   }
 ));
 
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    var users = db.get('users');
+    users.findOne({ name: username, provider: 'local'}, function (err, user) {
+      if (err) { return done(err); }
+      if (!user) { return done(null, false); }
+      if (!user.verifyPassword(password)) { return done(null, false); }
+      return done(null, user);
+    });
+  }
+));
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
     if (typeof req.user != 'undefined') {
-          
+        
         var users = db.get('users');
         users.insert({
             name: req.user.name,
@@ -118,6 +131,13 @@ router.get('/auth/reddit', function(req, res, next){
         duration: 'permanent',
     })(req, res, next);
 });
+
+router.post('/auth/local', 
+    passport.authenticate('local', { failureRedirect: '/login' }),
+    function(req, res) {
+        res.redirect('/');
+    }
+);
  
 router.get('/auth/reddit/callback', function(req, res, next){
     // Check for origin via state token 
