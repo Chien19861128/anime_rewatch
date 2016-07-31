@@ -23,7 +23,7 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new RedditStrategy({
     clientID: REDDIT_CONSUMER_KEY,
     clientSecret: REDDIT_CONSUMER_SECRET,
-    callbackURL: "http://203.75.245.16/auth/reddit/callback"
+    callbackURL: "http://415fb119.ngrok.io/auth/reddit/callback"
   },
   function(accessToken, refreshToken, profile, done) {
     // asynchronous verification, for effect...
@@ -44,7 +44,7 @@ passport.use(new LocalStrategy(
     users.findOne({ name: username, provider: 'local'}, function (err, user) {
       if (err) { return done(err); }
       if (!user) { return done(null, false); }
-      if (!user.verifyPassword(password)) { return done(null, false); }
+      if (user.password != password) { return done(null, false); }
       return done(null, user);
     });
   }
@@ -107,7 +107,7 @@ router.post('/search', function(req, res, next) {
                 title: 'Search - ' + search_text,
                 search_text: search_text,
 	            series: series_result,
-                result_count: series_result.count
+                result_count: series_result.length
 	        });
         }
     });

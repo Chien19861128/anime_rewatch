@@ -13,7 +13,7 @@ router.get('/:slug', function(req, res, next) {
         if (!err) {
             var episodes = db.get('episodes');
             
-            episodes.find({series_slug: req.params.slug}, {number: 1}, function (episodes_err, episodes_result) {
+            episodes.find({series_slug: req.params.slug}, {sort: {number: 1}}, function (episodes_err, episodes_result) {
                 if (!episodes_err) {
 	    	        res.render('series/index', {
                         title: series_result.title,
@@ -51,8 +51,8 @@ router.get('/:slug/start_group', function(req, res, next) {
         series.findOne({slug: req.params.slug}, function (err, series_result) {
             if (!err) {
                 res.render('series/start_group', {
-                    title: 'Starting group for - ' + series.title,
-                    series: series
+                    title: 'Starting group for - ' + series_result.title,
+                    series: series_result
                 });
             }
         });

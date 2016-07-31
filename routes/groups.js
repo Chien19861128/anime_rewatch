@@ -4,12 +4,13 @@ var monk = require('monk');
 var slug = require('slug');
 
 var db = monk('127.0.0.1:27017/rewatch');
-/*
+
 router.post('/create', function(req, res, next) {
     console.log(req.body);
     console.log(req.user);
 
-	var name = req.body.name;
+	/*
+    var name = req.body.name;
 	var slug_value=slug(req.body.name);
 	var description = (req.body.description)?req.body.description:"";
     var discussion_link = (req.body.discussion_link)?req.body.discussion_link:"";
@@ -19,6 +20,22 @@ router.post('/create', function(req, res, next) {
     if (req.body.ref_link) links[0] = req.body.ref_link;
     var is_active = false;
     var is_private = false;
+    */
+    
+    var groups = db.get('groups');
+    groups.insert({
+        name: req.body.name,
+        slug: slug(req.body.name),
+        description: (req.body.description)?req.body.description:"", 
+        discussion_link: (req.body.discussion_link)?req.body.discussion_link:"", 
+        admins: admins, 
+        links: links, 
+        is_active: false, 
+        is_private: false
+    },
+    function(err, group_result) {
+
+    });
     
 	var group_insert = "INSERT INTO groups(name, slug, description, discussion_link, admins, links, is_active, is_private) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 	var group_params = [name, slug_value, description, discussion_link, admins, links, is_active, is_private];
@@ -71,6 +88,7 @@ router.post('/create', function(req, res, next) {
 	});
 });
 
+/*
 router.get('/:slug/edit', function(req, res, next) {
     
     if (typeof req.user != 'undefined') {
@@ -142,6 +160,7 @@ router.post('/:slug/edit', function(req, res, next) {
             }
         }
     });
-});*/
+});
+*/
 
 module.exports = router;
