@@ -3,7 +3,7 @@ extends ../template/layout
 block content
     link(rel='stylesheet', href='/javascripts/datetimepicker-master/jquery.datetimepicker.css')
     script(type='text/javascript', src='/javascripts/datetimepicker-master/build/jquery.datetimepicker.full.min.js')
-    form(name="start_group", action="/groups/create", method="post")
+    form(name="start_group", action="/group/create", method="post")
         .form-group
             h3= 'Starting rewatch group for - ' + series.title
             input(type="hidden", name="series_slug", value=series.slug)
